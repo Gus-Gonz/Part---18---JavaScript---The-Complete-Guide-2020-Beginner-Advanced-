@@ -3,6 +3,7 @@ const postTemplate = document.getElementById('single-post');
 
 const form = document.querySelector('#new-post form');
 const fetchButton = document.querySelector('#available-posts button');
+const postList = document.querySelector('ul');
 
 const sendHttpRequest = (method, url, data) => {
   const promise = new Promise((resolve, reject) => {
@@ -14,6 +15,11 @@ const sendHttpRequest = (method, url, data) => {
     xhr.onload = () => {
       resolve(xhr.response);
       //   const listOfPosts = JSON.parse(xhr.response);
+    };
+
+    xhr.onerror = function () {
+      console.log(xhr.response);
+      console.log(xhr.status);
     };
 
     xhr.send(JSON.stringify(data));
@@ -54,4 +60,14 @@ form.addEventListener('submit', (event) => {
   const enteredContent = event.currentTarget.querySelector('#content').value;
 
   createPost(enteredTitle, enteredContent);
+});
+
+postList.addEventListener('click', (event) => {
+  if (event.target.tagName === 'BUTTON') {
+    const postId = event.target.closest('li').id;
+    sendHttpRequest(
+      'DELETE',
+      `https://jsonplaceholder.typicode.com/posts/${postId}`
+    );
+  }
 });
