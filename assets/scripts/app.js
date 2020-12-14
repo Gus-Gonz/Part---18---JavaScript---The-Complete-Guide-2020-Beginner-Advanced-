@@ -8,6 +8,8 @@ const postList = document.querySelector('ul');
 const sendHttpRequest = (method, url, data) => {
   const promise = new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
     xhr.open(method, url);
 
     xhr.responseType = 'json';
