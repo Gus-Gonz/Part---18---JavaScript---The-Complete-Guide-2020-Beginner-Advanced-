@@ -13,13 +13,17 @@ const sendHttpRequest = (method, url, data) => {
     xhr.responseType = 'json';
 
     xhr.onload = () => {
-      resolve(xhr.response);
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(xhr.response);
+      } else {
+        reject(new Error('Something went wrong!'));
+      }
+
       //   const listOfPosts = JSON.parse(xhr.response);
     };
 
     xhr.onerror = function () {
-      console.log(xhr.response);
-      console.log(xhr.status);
+      reject(new Error('Failed to sedn request!!'));
     };
 
     xhr.send(JSON.stringify(data));
@@ -39,7 +43,8 @@ const fetchPosts = () => {
         postEl.querySelector('li').id = post.id;
         listElement.append(postEl);
       }
-    }
+    },
+    (error) => alert(error.message)
   );
 };
 
